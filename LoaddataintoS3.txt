@@ -1,0 +1,26 @@
+CREATE EXTERNAL TABLE IF NOT EXISTS loan_data
+(
+loan_ID string,
+customer_ID string,
+customer_loan_amount int,
+term string,
+credit_score int,
+annual_income int,
+years_in_currentjob string,
+house_ownership string,
+purpose string,
+monthly_debt float,
+years_of_credit_history float,
+Months_since_last_delinquent int,
+Number_of_Open_Accounts int,
+Number_of_Credit_Problems int,
+Current_Credit_Balance int,
+Maximum_Open_Credit int,
+Bankruptcies int,
+Tax_Liens int
+)ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+LOCATION 's3://bankloandata/loandata/'
+TBLPROPERTIES("skip.header.line.count"="1");
+
+set hive.cli.print.header=true;
