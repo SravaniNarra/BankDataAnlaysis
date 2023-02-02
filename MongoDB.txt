@@ -1,0 +1,64 @@
+To install mongo db
+
+sudo vi /etc/yum.repos.d/mongodb-org-6.0.repo
+
+[mongodb-org-6.0]
+name=MongoDB Repository
+baseurl=https://repo.mongodb.org/yum/amazon/2/mongodb-org/6.0/x86_64/
+gpgcheck=1
+enabled=1
+gpgkey=https://www.mongodb.org/static/pgp/server-6.0.asc
+
+
+press esc and :wq to exit
+
+# This command will install mongodb
+
+sudo yum install -y mongodb-org
+
+sudo systemctl start mongod
+
+sudo systemctl status mongod
+
+sudo systemctl enable mongod
+
+sudo systemctl stop mongod
+
+sudo systemctl restart mongod
+
+mongodb connection: 
+
+ mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+1.6.2
+
+sudo systemctl daemon-reload
+
+mongosh -- To open mongo shell commands
+
+show collections;
+
+Push data into Mongodb:
+
+use loan_data;
+
+To connect Pyspark to mongodb:
+
+pip install pymongo 
+
+pyspark
+
+import pymongo
+from pymongo import MongoClient
+
+client=MongoClient('mongodb://127.0.0.1:27017/',27017)
+
+db11=client.loandata
+
+mycollection=db11.loan_data
+
+bankdf=spark.createDataFrame(loan_data)
+
+cursor=mycollection.find()
+for record in cursor:
+	print(record)
+
+
