@@ -23,7 +23,7 @@ Directions or anything needed before running the project.
 1. Create an EMR cluster on AWS. Select Spark while creation of the cluster
 2. Pyspark installation - pip install pyspark
 3. MongoDB installation - sudo yum install -y mongodb-org 
-
+4. Install pymongo package - pip install pymongo
 
 ## Contact
 
