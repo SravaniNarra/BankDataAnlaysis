@@ -1,0 +1,89 @@
+from os.path import abspath
+from pyspark.sql import SparkSession
+
+#enableHiveSupport() -> enables sparkSession to connect with Hive
+warehouse_location = abspath('/user/spark/warehouse')
+spark = SparkSession \
+    .builder \
+    .appName("SparkByExamples.com") \
+    .config("spark.sql.warehouse.dir", warehouse_location) \
+    .enableHiveSupport() \
+    .getOrCreate()
+
+#Read Hive table	
+	
+df = spark.sql("select * from loandata.loan_data")
+df.show()
+
+# Read Hive table
+df = spark.read.table("loan_data")
+df.show()
+
+import pyspark
+
+#1. Create a dataframe with the Customer IDs having top 5 current loan amounts  and save the result in MongoDB?
+
+db1=spark.sql("select * from loan_data order by customer_loan_amount desc limit 5")
+db1.show() # Displays data with top loan amounts
+
+#2. Create a dataframe with the Customer IDs having the lowest 5 current loan amounts  and save the result in MongoDB?
+db2=spark.sql("select * from loan_data order by customer_loan_amount limit 5")
+db2.show()
+
+#3. Create a dataframe of Customer IDs who have taken the Short Term Loan and include their total Current Loan Amount 
+#and save the result in MongoDB? 
+
+db3=spark.sql("select customer_ID,customer_loan_amount from loan_data where term like 'Short%' ")
+db3.show()
+
+4. Create a dataframe of Customer IDs who have taken the Long Term Loan and include their total Current Loan Amount
+# and save the result in MongoDB? 
+
+db4=spark.sql("select customer_ID,customer_loan_amount from loan_data where term like 'Long%' ")
+db4.show()
+
+5. Count how many Bankruptcies are present?
+db5=spark.sql("select count(Bankruptcies) from loan_data where Bankruptcies>=1")
+db5.show()
+
+
+6. Group the data based on Term and find the average monthly debt.
+
+db6=spark.sql("select *,avg(monthly_debt) over(partition by term order by customer_ID) from loan_data")
+db6.show()
+
+
+7. Create a dataframe of the customers who have 10 + years experience in their current job. Include their Annual Income.
+
+db7=spark.sql("select customer_ID,annual_income,years_in_currentjob from loan_data where years_in_currentjob like '10+ %' ")
+db7.show()
+
+
+8. Group the data based on Home ownership and Term. Find the aggregated sum of the total current loan.
+
+db8=spark.sql("select house_ownership,term, sum(customer_loan_amount) over(partition by house_ownership,term order by customer_ID) from loan_data")
+db8.show()
+
+9. Find the highest credit score for short term and long term customers
+
+db9=spark.sql("select max(credit_score) from loan_data group by term")
+db9.show()
+
+10. Group the data based on years in current job and Home ownership and find the aggregated sum of credit score.
+
+db10=spark.sql("select house_ownership,sum(credit_score) over(partition by years_in_currentjob,house_ownership order by customer_ID)from loan_data")
+db10.show()
+
+
+db1=[list(row) for row in db1.collect()]
+import numpy as np
+ar=np.array(db1)
+
+dict={}
+
+for i,column in enumerate(db1.columns):
+	dict[column]=list(ar[:,i])
+
+dict # Now we converted into dictionary
+
+for key,value in 
